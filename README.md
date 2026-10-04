@@ -1,6 +1,6 @@
 **tic_artifact_check**
 
-A pre-flight check for [TRICERATOPS](https://github.com/stevengiacalone/triceratops) users. It cross-matches the TESS Input Catalog (TIC) around a target against Gaia DR3 to flag **phantom stars** and **duplicate catalog entries** before they distort false-positive probability (FPP) calculations.
+A pre-flight check for [TRICERATOPS](https://github.com/stevengiacalone/triceratops) users. It cross-matches the TESS Input Catalog (TIC) around a target against Gaia DR3 to flag phantom stars and duplicate catalog entries before they distort false-positive probability (FPP) calculations.
 
 **Why**
 
@@ -84,6 +84,6 @@ Runs offline on synthetic star fields. Covers phantoms, duplicates, proper-motio
 - TIC dispositions were assigned automatically and can be wrong.
 - Results depend on MAST and VizieR availability; failed queries are logged in `summary.csv` and can be rerun with `--file`.
 
-## Author
+**Author**
 
 Anisha Goyal
