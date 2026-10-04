@@ -1,6 +1,6 @@
 **tic_artifact_check**
 
-A pre-flight check for TRICERATOPS users. It cross-matches the TESS Input Catalog (TIC) around a target against Gaia DR3 to flag **phantom stars** and **duplicate catalog entries** before they distort false-positive probability (FPP) calculations.
+A pre-flight check for [TRICERATOPS](https://github.com/stevengiacalone/triceratops) users. It cross-matches the TESS Input Catalog (TIC) around a target against Gaia DR3 to flag **phantom stars** and **duplicate catalog entries** before they distort false-positive probability (FPP) calculations.
 
 **Why**
 
@@ -18,11 +18,11 @@ For each target, the tool:
 
 | Verdict | Meaning | Action |
 |---|---|---|
-| Phantom | Bad TIC disposition (ARTIFACT/DUPLICATE/SPLIT) **and** no Gaia source | Drop: the star doesn't exist |
-| Duplicate Copy | Bad TIC disposition **and** a copy of another entry (shares its Gaia source, or TIC's Dupicate ID says so) | Drop: the star is counted twice |
-| Check | Exactly one warning sign | Inspect by hand |
-| ok | No warning signs | Keep |
-| Target | The target itself | Never dropped; copies of it are |
+| PHANTOM | Bad TIC disposition (ARTIFACT/DUPLICATE/SPLIT) **and** no Gaia source | Drop: the star doesn't exist |
+| DUPLICATE_COPY | Bad TIC disposition **and** a copy of another entry (shares its Gaia source, or TIC's duplicate_id says so) | Drop: the star is counted twice |
+| CHECK | Exactly one warning sign | Inspect by hand |
+| OK | No warning signs | Keep |
+| TARGET | The target itself | Never dropped; copies of it are |
 
 A star is only dropped when two independent lines of evidence agree, because wrongly removing a real star would make a false positive look more planet-like.
 
@@ -68,6 +68,15 @@ A random sample of 294 TESS planet candidates (TFOPWG disposition PC, seed 42) w
 For TOI-7136.01, TRICERATOPS loads the duplicate copy of the target into its stellar field at 0" separation with identical brightness, and lists it ahead of the real target.
 
 **Not yet tested:** how much these entries change TRICERATOPS FPP values in practice.
+
+Full per-target results are in `summary.csv`. `TIC68035559_field.csv` is the TOI-2484 validation run.
+
+**Tests**
+
+```
+python test_mock.py
+```
+Runs offline on synthetic star fields. Covers phantoms, duplicates, proper-motion correction, `duplicate_id` pointers, and making sure the target is never dropped (including a case set up like TOI-7136.01).
 
 **Limitations**
 
