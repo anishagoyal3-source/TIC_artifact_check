@@ -1,12 +1,12 @@
-# tic_artifact_check
+**tic_artifact_check**
 
 A pre-flight check for TRICERATOPS users. It cross-matches the TESS Input Catalog (TIC) around a target against Gaia DR3 to flag **phantom stars** and **duplicate catalog entries** before they distort false-positive probability (FPP) calculations.
 
-## Why
+**Why**
 
 TRICERATOPS treats every TIC star near a target as a possible source of the transit. But the TIC contains entries that don't correspond to real, separate stars. While validating TOI-2484, a phantom TIC neighbor (TIC 68035558, 4.17" from the target, Tmag 11.5, no Gaia counterpart) inflated the FPP from 0.27 to 0.48. This tool catches that kind of error automatically.
 
-## How it works
+**How it works**
 
 For each target, the tool:
 
@@ -18,21 +18,21 @@ For each target, the tool:
 
 | Verdict | Meaning | Action |
 |---|---|---|
-| `PHANTOM` | Bad TIC disposition (ARTIFACT/DUPLICATE/SPLIT) **and** no Gaia source | Drop: the star doesn't exist |
-| `DUPLICATE_COPY` | Bad TIC disposition **and** a copy of another entry (shares its Gaia source, or TIC's `duplicate_id` says so) | Drop: the star is counted twice |
-| `CHECK` | Exactly one warning sign | Inspect by hand |
-| `OK` | No warning signs | Keep |
-| `TARGET` | The target itself | Never dropped; copies of it are |
+| Phantom | Bad TIC disposition (ARTIFACT/DUPLICATE/SPLIT) **and** no Gaia source | Drop: the star doesn't exist |
+| Duplicate Copy | Bad TIC disposition **and** a copy of another entry (shares its Gaia source, or TIC's Dupicate ID says so) | Drop: the star is counted twice |
+| Check | Exactly one warning sign | Inspect by hand |
+| ok | No warning signs | Keep |
+| Target | The target itself | Never dropped; copies of it are |
 
 A star is only dropped when two independent lines of evidence agree, because wrongly removing a real star would make a false positive look more planet-like.
 
-## Installation
+**Installation**
 
 ```
 pip install numpy pandas astropy astroquery
 ```
 
-## Usage
+**Usage**
 
 **Check one target** (the main use):
 ```
@@ -54,7 +54,7 @@ Options: `--radius` (search radius, arcsec), `--match-radius` (TIC–Gaia match 
 
 Outputs: one `TIC<id>_field.csv` per target and a `summary.csv` across all targets.
 
-## Survey results
+**Survey results**
 
 A random sample of 294 TESS planet candidates (TFOPWG disposition PC, seed 42) with 95% Wilson intervals:
 
@@ -69,7 +69,7 @@ For TOI-7136.01, TRICERATOPS loads the duplicate copy of the target into its ste
 
 **Not yet tested:** how much these entries change TRICERATOPS FPP values in practice.
 
-## Limitations
+**Limitations**
 
 - Gaia misses some real stars (very faint, very bright, or tight pairs under ~1"), which is why a missing Gaia match alone only produces `CHECK`.
 - TIC dispositions were assigned automatically and can be wrong.
